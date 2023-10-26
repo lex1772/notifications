@@ -22,7 +22,8 @@ users_collection = database.get_collection("users_collection")
 notifications_collection = database.get_collection("notifications_collection")
 
 
-# Добавляем вспомогательные функции для анализа результатов запроса к базе данных в словарь
+# Добавляем вспомогательные функции
+# для анализа результатов запроса к базе данных в словарь
 def user_helper(user) -> dict:
     return {
         "user_id": user["user_id"],
@@ -46,7 +47,8 @@ def notification_helper(notification) -> dict:
 # Получение списка уведомлений
 async def retrieve_notifications(user_id: str, skip: int, limit: int):
     notifications = []
-    async for notification in notifications_collection.find({"user_id": user_id}):
+    async for notification in (
+            notifications_collection.find({"user_id": user_id})):
         notifications.append(notification_helper(notification))
     return notifications[skip:limit]
 
@@ -54,7 +56,9 @@ async def retrieve_notifications(user_id: str, skip: int, limit: int):
 # Создание уведомления
 async def create_notification(notification_data: dict) -> dict:
     notifications = []
-    async for notification in notifications_collection.find({"user_id": notification_data['user_id']}):
+    async for notification in (
+            notifications_collection.find(
+                {"user_id": notification_data['user_id']})):
         notifications.append(notification_helper(notification))
     if len(notifications) > 9:
         return {'error': "Уведомлений должно быть не больше 10"}
@@ -64,7 +68,9 @@ async def create_notification(notification_data: dict) -> dict:
 
 # Прочтение уведомления
 async def read_notification(user_id: str, id: str) -> dict:
-    notification = await notifications_collection.find_one({"_id": ObjectId(id), "user_id": user_id})
+    notification = \
+        await notifications_collection.find_one(
+            {"_id": ObjectId(id), "user_id": user_id})
     if notification:
         updated_notification = await notifications_collection.update_one(
             {"_id": ObjectId(id)}, {"$set": {"is_new": False}}

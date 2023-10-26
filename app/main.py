@@ -8,4 +8,7 @@ load_dotenv(find_dotenv())
 
 # Запуск приложения
 if __name__ == "__main__":
-    uvicorn.run("server.app:app", host="0.0.0.0", port=int(os.getenv("PORT")), reload=True)
+    uvicorn.run("server.app:app",
+                host="0.0.0.0",
+                port=int(os.getenv("PORT")),
+                reload=True)

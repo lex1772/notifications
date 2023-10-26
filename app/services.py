@@ -12,7 +12,8 @@ from app.server.database import users_collection
 load_dotenv(find_dotenv())
 
 
-# Функция для поиска пользователя. Если пользователя нет, то создается тестовый пользователь
+# Функция для поиска пользователя.
+# Если пользователя нет, то создается тестовый пользователь
 async def find_user(user_id):
     user = users_collection.find_one({"user_id": user_id})
     user_data = await user

@@ -16,7 +16,8 @@ router = APIRouter()
 
 
 # Маршрут для создания уведомления
-@router.post("/create", response_description="Notification data added into the database")
+@router.post("/create",
+             response_description="Notification created and send to email")
 async def add(notification: Notification = Body(...)):
     notification = jsonable_encoder(notification)
 
@@ -33,17 +34,25 @@ async def add(notification: Notification = Body(...)):
 
 
 # Маршрут для получения уведомлений
-@router.get("/list", response_description="Notification data added into the database")
+@router.get("/list",
+            response_description="List of notifications")
 async def get(user_id: str, skip: int, limit: int):
     notifications = await retrieve_notifications(user_id, skip, limit)
     new = list(filter(lambda x: x['is_new'] is True, notifications))
-    return JSONResponse({"success": True, "data": {"elements": len(notifications), "new": len(new),
-                                                   "request": {"user_id": user_id, "skip": skip, "limit": limit},
-                                                   "list": notifications}})
+    return JSONResponse(
+        {"success": True, "data":
+            {"elements": len(notifications),
+             "new": len(new),
+             "request":
+                 {"user_id": user_id,
+                  "skip": skip,
+                  "limit": limit},
+             "list": notifications}})
 
 
 # Маршрут для прочтения уведомления
-@router.post("/read", response_description="Notification data added into the database")
+@router.post("/read",
+             response_description="Read notification")
 async def read(user_id: str, id: str):
     notification = await read_notification(user_id, id)
     return notification
