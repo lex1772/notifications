@@ -112,6 +112,7 @@
 - Flake8
 - python-dotenv
 - pydantic
+- async
 
 ### Начало работы с Docker-compose
 1. Заполнить .env файл в соответствии с .env_sample
